@@ -1,11 +1,25 @@
 # -*- coding: utf-8
-from tkinter import *
+from tkinter import (
+    StringVar,
+    Radiobutton,
+    W,
+    Button,
+    Label,
+    Checkbutton,
+    IntVar,
+    END,
+    Entry,
+    E,
+    N,
+    S,
+)
 from PIL import ImageTk, Image
+import tkinter as tk
 import requests
 import json
 
 
-root = Tk()
+root = tk.Tk()
 root.title("Here is the Weather!")
 root.iconbitmap(".\partlycloudy.ico")
 # root.geometry("700x600")
@@ -50,7 +64,7 @@ def submit_weather_view():
             # api request
             params = {
                 # input api key from weatherstack for access_key value
-                "access_key": "",
+                "access_key": api_key_lookup.get(),
                 "query": city_lookup.get(),
                 "units": unit.get(),
             }
@@ -73,7 +87,7 @@ def submit_weather_view():
             response_visibility = api["current"]["visibility"]
 
         def submit():
-
+            api_key_lookup.grid_forget()
             try:
                 api_set()
                 clear_buttons()
@@ -203,9 +217,8 @@ def submit_weather_view():
                 clear_buttons()
                 city_lookup.grid_forget()
                 my_button.grid_forget()
-                error_label = Label(root, text = "Error...", font = "Helvetica")
-                error_label.grid(row = 0, column = 0)
-                
+                error_label = Label(root, text="Error...", font="Helvetica")
+                error_label.grid(row=0, column=0)
 
         # Set Labels
         entry_type_label = Label(root, font="Helvetica")
@@ -308,13 +321,19 @@ def submit_weather_view():
 
         city_lookup = Entry(root)
         city_lookup.grid(row=0, column=0, stick=W + E + N + S)
+        city_lookup.insert(END, "Enter a city or zipcode")
 
         my_button = Button(root, text="Submit", command=submit)
         my_button.grid(row=0, column=1, stick=W)
+
+        api_key_lookup = Entry(root)
+        api_key_lookup.grid(row=1, column=0, stick=W + E + N + S)
+        api_key_lookup.insert(END, "Enter your API Key")
     else:
         historical_label = Label(
             root, text="You've chosen historical weather!", font="Helvetica"
-        ).pack()
+        )
+        historical_label.pack()
 
 
 weather_view = StringVar()
