@@ -199,8 +199,13 @@ def submit_weather_view():
 
                 city_lookup.delete(0, END)
 
-            except Exception as e:
-                api = "Error..."
+            except:
+                clear_buttons()
+                city_lookup.grid_forget()
+                my_button.grid_forget()
+                error_label = Label(root, text = "Error...", font = "Helvetica")
+                error_label.grid(row = 0, column = 0)
+                
 
         # Set Labels
         entry_type_label = Label(root, font="Helvetica")
