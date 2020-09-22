@@ -1,11 +1,12 @@
 # -*- coding: utf-8
-from tkinter import *
+from tkinter import StringVar, Radiobutton, W, Button, Label, Checkbutton, IntVar, END, Entry, E, N, S
 from PIL import ImageTk, Image
+import tkinter as tk
 import requests
 import json
 
 
-root = Tk()
+root = tk.Tk()
 root.title("Here is the Weather!")
 root.iconbitmap(".\partlycloudy.ico")
 # root.geometry("700x600")
