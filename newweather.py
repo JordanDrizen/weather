@@ -36,8 +36,6 @@ def submit_weather_view():
             metric_button.grid_forget()
             scientific_button.grid_forget()
             fahrenheit_button.grid_forget()
-            # city_lookup.grid_forget()
-            # my_button.grid_forget()
 
             entry_type_checkbox.grid_forget()
             exact_entry_checkbox.grid_forget()
