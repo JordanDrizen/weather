@@ -50,7 +50,8 @@ def submit_weather_view():
 
 			#api request
 			params = {
-				'access_key': 'afcf823a27c3bdabfe2a1e7e108a60d4',
+				# input api key from weatherstack for access_key value
+				'access_key': '',
 				'query': city_lookup.get(),
 				'units': unit.get()
 				}
