@@ -326,7 +326,7 @@ def submit_weather_view():
 
         api_key_lookup = Entry(root)
         api_key_lookup.grid(row=1, column=0, stick=W + E + N + S)
-        api_key_lookup.insert(END, "Enter your API Key")
+        api_key_lookup.insert(END, "afcf823a27c3bdabfe2a1e7e108a60d4")
     else:
         historical_label = Label(
             root, text="You've chosen historical weather!", font="Helvetica"
