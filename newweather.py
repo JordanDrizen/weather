@@ -17,6 +17,9 @@ from PIL import ImageTk, Image
 import tkinter as tk
 import requests
 import json
+from datetime import timedelta, date
+import array as arr
+import matplotlib.pyplot as plt
 
 
 root = tk.Tk()
@@ -24,13 +27,14 @@ root.title("Here is the Weather!")
 root.iconbitmap(".\partlycloudy.ico")
 # root.geometry("700x600")
 
+degree_symbol = u"\xb0"
+
 
 def submit_weather_view():
     current_weather_button.grid_forget()
     historical_weather_button.grid_forget()
     submit_weather_view_button.grid_forget()
     if weather_view.get() == "current":
-        degree_symbol = u"\xb0"
 
         def clear_buttons():
             metric_button.grid_forget()
@@ -89,6 +93,7 @@ def submit_weather_view():
             try:
                 api_set()
                 clear_buttons()
+
                 """
 				global weather_icon
 				weather_icon = ImageTk.PhotoImage(Image.open('images/Weather Icons/partlycloudy.ico'))
@@ -328,10 +333,73 @@ def submit_weather_view():
         api_key_lookup.grid(row=1, column=0, stick=W + E + N + S)
         api_key_lookup.insert(END, "afcf823a27c3bdabfe2a1e7e108a60d4")
     else:
-        historical_label = Label(
-            root, text="You've chosen historical weather!", font="Helvetica"
+
+        def api_set():
+            global response_temp, response_date_time, city
+            response_date_time = []
+            response_temp = []
+            city = city_lookup.get()
+            for i in range(5):
+                params = {
+                    "key": "96a326ceefe5486894b5c3555462a93b",
+                    "city": city_lookup.get(),
+                    "start_date": date.today() - timedelta(days=5 - i),
+                    "end_date": date.today() - timedelta(days=4 - i),
+                    "units": unit.get(),
+                }
+                api_request = requests.get(
+                    "http://api.weatherbit.io/v2.0/history/daily", params
+                )
+                api = api_request.json()
+                response_temp.append(api["data"][0]["temp"])
+                response_date_time.append(api["data"][0]["datetime"])
+            
+
+        def submit():
+            api_set()
+            metric_button.grid_forget()
+            scientific_button.grid_forget()
+            fahrenheit_button.grid_forget()
+            city_lookup.grid_forget()
+            submit_city_button.grid_forget()
+            """
+            date_title_label = Label(root, text="Date:")
+            date_title_label.grid(row=0, column=0, padx=10, pady=10)
+            temp_title_label = Label(root, text="Average Temp(" + degree_symbol + "F):")
+            temp_title_label.grid(row=0, column=1, padx=10, pady=10)
+            for i in range(5):
+                date_label = Label(root, text=response_date_time[i])
+                date_label.grid(row=i + 1, column=0, padx=10)
+                temp_label = Label(root, text=response_temp[i])
+                temp_label.grid(row=i + 1, column=1, padx=10)
+            """
+            plt.plot(response_date_time, response_temp, "r--")
+            plt.ylabel("Average Temp(" + degree_symbol + "F)")
+            plt.title(label="Average Temperature of " + city)
+            plt.show()
+
+        city_lookup = Entry(root)
+        city_lookup.grid(row=0, column=0, stick=W + E + N + S)
+        city_lookup.insert(END, "Dallas")
+
+        submit_city_button = Button(root, text="Submit", command=submit)
+        submit_city_button.grid(row=0, column=1, stick=W)
+
+        # Radio Buttons
+        unit = StringVar()
+        unit.set("I")
+        metric_button = Radiobutton(root, text="Metric", variable=unit, value="M")
+        scientific_button = Radiobutton(
+            root, text="Scientific", variable=unit, value="S"
         )
-        historical_label.pack()
+        fahrenheit_button = Radiobutton(
+            root, text="Fahrenheit", variable=unit, value="I"
+        )
+
+        # Radio Button grid
+        scientific_button.grid(row=1, column=0, stick=W)
+        fahrenheit_button.grid(row=2, column=0, stick=W)
+        metric_button.grid(row=3, column=0, stick=W)
 
 
 weather_view = StringVar()
