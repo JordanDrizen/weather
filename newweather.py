@@ -330,18 +330,19 @@ def submit_weather_view():
     else:
 
         def api_set():
-            global response_temp, response_date_time, city, response_high_temp, response_low_temp, df
+            global response_temp, response_date_time, city, response_high_temp, response_low_temp, df, number_of_days
             response_date_time = []
             response_temp = []
             response_high_temp = []
             response_low_temp = []
             city = city_lookup.get()
-            for i in range(5):
+            number_of_days = 7
+            for i in range(number_of_days):
                 params = {
                     "key": "96a326ceefe5486894b5c3555462a93b",
                     "city": city_lookup.get(),
-                    "start_date": date.today() - timedelta(days=5 - i),
-                    "end_date": date.today() - timedelta(days=4 - i),
+                    "start_date": date.today() - timedelta(days=number_of_days - i),
+                    "end_date": date.today() - timedelta(days=number_of_days - 1 - i),
                     "units": unit.get(),
                 }
                 api_request = requests.get(
@@ -365,8 +366,20 @@ def submit_weather_view():
             city_lookup.grid_forget()
             submit_city_button.grid_forget()
             
-            x = response_date_time
-            y = response_temp
+            x = []
+            x.extend(range(number_of_days))
+            y_avg = response_temp
+            z_avg = np.polyfit(x, y_avg, 1)
+            p_avg = np.poly1d(z_avg)
+            plt.plot(x,p_avg(x))
+            y_high = response_high_temp
+            z_high = np.polyfit(x, y_high, 1)
+            p_high = np.poly1d(z_high)
+            plt.plot(x,p_high(x))
+            y_low = response_low_temp
+            z_low = np.polyfit(x, y_low, 1)
+            p_low = np.poly1d(z_low)
+            plt.plot(x,p_low(x))
             plt.plot(df['Date'], df['Average Temp'], "r--")
             plt.plot(response_high_temp)
             plt.plot(response_low_temp)
