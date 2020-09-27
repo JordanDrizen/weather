@@ -20,6 +20,8 @@ import json
 from datetime import timedelta, date
 import array as arr
 import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
 
 
 root = tk.Tk()
@@ -65,7 +67,7 @@ def submit_weather_view():
 
             # api request
             params = {
-                # input api key from weatherstack for access_key value
+                
                 "access_key": api_key_lookup.get(),
                 "query": city_lookup.get(),
                 "units": unit.get(),
@@ -94,14 +96,7 @@ def submit_weather_view():
                 api_set()
                 clear_buttons()
 
-                """
-				global weather_icon
-				weather_icon = ImageTk.PhotoImage(Image.open('images/Weather Icons/partlycloudy.ico'))
-				weather_icon_label = Label(root)
-				weather_icon_label.grid(row = 0, column = 0)
-				weather_icon_label.config(image = weather_icon)
-				"""
-
+                
                 if select_all_checkbox_var.get() == 1:
                     entry_type_checkbox.select()
                     exact_entry_checkbox.select()
@@ -335,9 +330,11 @@ def submit_weather_view():
     else:
 
         def api_set():
-            global response_temp, response_date_time, city
+            global response_temp, response_date_time, city, response_high_temp, response_low_temp, df
             response_date_time = []
             response_temp = []
+            response_high_temp = []
+            response_low_temp = []
             city = city_lookup.get()
             for i in range(5):
                 params = {
@@ -353,6 +350,11 @@ def submit_weather_view():
                 api = api_request.json()
                 response_temp.append(api["data"][0]["temp"])
                 response_date_time.append(api["data"][0]["datetime"])
+                response_high_temp.append(api["data"][0]["max_temp"])
+                response_low_temp.append(api["data"][0]["min_temp"])
+            df = pd.DataFrame()
+            df['Date'] = response_date_time
+            df['Average Temp'] = response_temp
             
 
         def submit():
@@ -362,18 +364,12 @@ def submit_weather_view():
             fahrenheit_button.grid_forget()
             city_lookup.grid_forget()
             submit_city_button.grid_forget()
-            """
-            date_title_label = Label(root, text="Date:")
-            date_title_label.grid(row=0, column=0, padx=10, pady=10)
-            temp_title_label = Label(root, text="Average Temp(" + degree_symbol + "F):")
-            temp_title_label.grid(row=0, column=1, padx=10, pady=10)
-            for i in range(5):
-                date_label = Label(root, text=response_date_time[i])
-                date_label.grid(row=i + 1, column=0, padx=10)
-                temp_label = Label(root, text=response_temp[i])
-                temp_label.grid(row=i + 1, column=1, padx=10)
-            """
-            plt.plot(response_date_time, response_temp, "r--")
+            
+            x = response_date_time
+            y = response_temp
+            plt.plot(df['Date'], df['Average Temp'], "r--")
+            plt.plot(response_high_temp)
+            plt.plot(response_low_temp)
             plt.ylabel("Average Temp(" + degree_symbol + "F)")
             plt.title(label="Average Temperature of " + city)
             plt.show()

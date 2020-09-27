@@ -1,3 +1,4 @@
 {
-    "python.linting.enabled": false
+    "python.linting.enabled": false,
+    "python.pythonPath": "/Users/jordandrizen/Desktop/pythonstuff/weather/env/bin/python3.8"
 }
