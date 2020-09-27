@@ -336,7 +336,7 @@ def submit_weather_view():
             response_high_temp = []
             response_low_temp = []
             city = city_lookup.get()
-            number_of_days = 7
+            number_of_days = 14
             for i in range(number_of_days):
                 params = {
                     "key": "96a326ceefe5486894b5c3555462a93b",
@@ -371,21 +371,24 @@ def submit_weather_view():
             y_avg = response_temp
             z_avg = np.polyfit(x, y_avg, 1)
             p_avg = np.poly1d(z_avg)
-            plt.plot(x,p_avg(x))
+            plt.plot(x,p_avg(x), "--", label = "y=%.6fx+(%.6f)"%(z_avg[0],z_avg[1]))
             y_high = response_high_temp
             z_high = np.polyfit(x, y_high, 1)
             p_high = np.poly1d(z_high)
-            plt.plot(x,p_high(x))
+            plt.plot(x,p_high(x), "--", label = "y=%.6fx+(%.6f)"%(z_high[0],z_high[1]))
             y_low = response_low_temp
             z_low = np.polyfit(x, y_low, 1)
             p_low = np.poly1d(z_low)
-            plt.plot(x,p_low(x))
-            plt.plot(df['Date'], df['Average Temp'], "r--")
+            plt.plot(x,p_low(x), "--", label = "y=%.6fx+(%.6f)"%(z_low[0],z_low[1]))
+            plt.plot(df['Date'], df['Average Temp'])
             plt.plot(response_high_temp)
             plt.plot(response_low_temp)
             plt.ylabel("Average Temp(" + degree_symbol + "F)")
             plt.title(label="Average Temperature of " + city)
+            plt.legend()
             plt.show()
+            
+            
 
         city_lookup = Entry(root)
         city_lookup.grid(row=0, column=0, stick=W + E + N + S)
