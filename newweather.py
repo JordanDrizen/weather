@@ -26,10 +26,10 @@ import numpy as np
 
 root = tk.Tk()
 root.title("Here is the Weather!")
-root.iconbitmap(".\partlycloudy.ico")
+#root.iconbitmap(".\partlycloudy.ico")
 # root.geometry("700x600")
 
-degree_symbol = u"\xb0"
+degree_symbol = "\xb0"
 
 
 def submit_weather_view():
@@ -67,7 +67,6 @@ def submit_weather_view():
 
             # api request
             params = {
-                
                 "access_key": api_key_lookup.get(),
                 "query": city_lookup.get(),
                 "units": unit.get(),
@@ -96,7 +95,6 @@ def submit_weather_view():
                 api_set()
                 clear_buttons()
 
-                
                 if select_all_checkbox_var.get() == 1:
                     entry_type_checkbox.select()
                     exact_entry_checkbox.select()
@@ -113,25 +111,25 @@ def submit_weather_view():
 
                 # Set labels
                 if entry_type_checkbox_var.get() == 1:
-                    entry_type_label.config(text="Entry Type: " + response_entry_type)
+                    entry_type_label.config(text=f"Entry Type: {response_entry_type}")
                     entry_type_label.grid(row=1, column=0)
 
                 if exact_entry_checkbox_var.get() == 1:
                     exact_entry_label.config(
-                        text="Exact Entry: " + response_exact_entry
+                        text=f"Exact Entry: {response_exact_entry}"
                     )
                     exact_entry_label.grid(row=1, column=1)
 
                 if latitude_checkbox_var.get() == 1:
-                    latitude_label.config(text="Latitude: " + str(response_latitude))
+                    latitude_label.config(text=f"Latitude: {response_latitude}")
                     latitude_label.grid(row=3, column=1)
 
                 if longitude_checkbox_var.get() == 1:
-                    longitude_label.config(text="Longitude: " + str(response_longitude))
+                    longitude_label.config(text=f"Longitude: {response_longitude}")
                     longitude_label.grid(row=4, column=1)
 
                 if city_checkbox_var.get() == 1:
-                    city_label.config(text="City: " + response_city)
+                    city_label.config(text=f"City: {response_city}")
                     city_label.grid(row=2, column=0)
 
                 if current_temp_checkbox_var.get() == 1:
@@ -139,73 +137,60 @@ def submit_weather_view():
                     if unit.get() == "m":
                         temperature_symbol = "C"
                         current_temp_label.config(
-                            text="Current Temperature: "
-                            + str(response_current_temp)
-                            + degree_symbol
-                            + temperature_symbol
+                            text=f"Current Temperature: {response_current_temp}{degree_symbol}{temperature_symbol}"
                         )
                     elif unit.get() == "s":
                         temperature_symbol = "K"
                         current_temp_label.config(
-                            text="Current Temperature: "
-                            + str(response_current_temp)
-                            + temperature_symbol
+                            text=f"Current Temperature: {response_current_temp}{temperature_symbol}"
                         )
                     elif unit.get() == "f":
                         temperature_symbol = "F"
                         current_temp_label.config(
-                            text="Current Temperature: "
-                            + str(response_current_temp)
-                            + degree_symbol
-                            + temperature_symbol
+                            text=f"Current Temperature: {response_current_temp}{degree_symbol}{temperature_symbol}"
                         )
 
                 if current_time_checkbox_var.get() == 1:
                     current_time_label.config(
-                        text="Current Time: " + response_current_time
+                        text=f"Current Time: {response_current_time}"
                     )
                     current_time_label.grid(row=2, column=1)
 
                 if weather_description_checkbox_var.get() == 1:
                     weather_description_label.config(
-                        text="Weather Description: " + str(response_weather_description)
+                        text=f"Weather Description: {response_weather_description}"
                     )
                     weather_description_label.grid(row=1, column=2)
 
                 if wind_speed_checkbox_var.get() == 1:
                     if unit.get() == "m" or unit.get() == "s":
                         wind_speed_label.config(
-                            text="Wind Speed: " + str(response_wind_speed) + "km/h"
+                            text=f"Wind Speed: {response_wind_speed}km/h"
                         )
                     elif unit.get() == "f":
                         wind_speed_label.config(
-                            text="Wind Speed: " + str(response_wind_speed) + "mph"
+                            text=f"Wind Speed: {response_wind_speed}mph"
                         )
                     wind_speed_label.grid(row=2, column=2)
 
                 if humidity_checkbox_var.get() == 1:
-                    humidity_label.config(
-                        text="Humidity: " + str(response_humidity) + "%"
-                    )
+                    humidity_label.config(text=f"Humidity: {response_humidity}%")
                     humidity_label.grid(row=3, column=2)
 
                 if feels_like_checkbox_var.get() == 1:
                     feels_like_label.config(
-                        text="Feels Like: "
-                        + str(response_feels_like)
-                        + degree_symbol
-                        + temperature_symbol
+                        text=f"Feels Like: {response_feels_like}{degree_symbol}{temperature_symbol}"
                     )
                     feels_like_label.grid(row=4, column=0)
 
                 if visibility_checkbox_var.get() == 1:
                     if unit.get() == "m" or unit.get() == "s":
                         visibility_label.config(
-                            text="Visibility: " + str(response_visibility) + "km"
+                            text=f"Visibility: {response_visibility}km"
                         )
                     elif unit.get() == "f":
                         visibility_label.config(
-                            text="Visibility: " + str(response_visibility) + " miles"
+                            text=f"Visibility: {response_visibility}miles"
                         )
                     visibility_label.grid(row=4, column=2)
 
@@ -336,10 +321,10 @@ def submit_weather_view():
             response_high_temp = []
             response_low_temp = []
             city = city_lookup.get()
-            number_of_days = 14
+            number_of_days = 5
             for i in range(number_of_days):
                 params = {
-                    "key": "96a326ceefe5486894b5c3555462a93b",
+                    "key": "d0da5088f19041ce854543731a901d17",
                     "city": city_lookup.get(),
                     "start_date": date.today() - timedelta(days=number_of_days - i),
                     "end_date": date.today() - timedelta(days=number_of_days - 1 - i),
@@ -354,9 +339,8 @@ def submit_weather_view():
                 response_high_temp.append(api["data"][0]["max_temp"])
                 response_low_temp.append(api["data"][0]["min_temp"])
             df = pd.DataFrame()
-            df['Date'] = response_date_time
-            df['Average Temp'] = response_temp
-            
+            df["Date"] = response_date_time
+            df["Average Temp"] = response_temp
 
         def submit():
             api_set()
@@ -365,30 +349,30 @@ def submit_weather_view():
             fahrenheit_button.grid_forget()
             city_lookup.grid_forget()
             submit_city_button.grid_forget()
-            
+
             x = []
             x.extend(range(number_of_days))
             y_avg = response_temp
             z_avg = np.polyfit(x, y_avg, 1)
             p_avg = np.poly1d(z_avg)
-            plt.plot(x,p_avg(x), "--", label = "y=%.6fx+(%.6f)"%(z_avg[0],z_avg[1]))
+            plt.plot(x, p_avg(x), "--", label="y=%.6fx+(%.6f)" % (z_avg[0], z_avg[1]))
             y_high = response_high_temp
             z_high = np.polyfit(x, y_high, 1)
             p_high = np.poly1d(z_high)
-            plt.plot(x,p_high(x), "--", label = "y=%.6fx+(%.6f)"%(z_high[0],z_high[1]))
+            plt.plot(
+                x, p_high(x), "--", label="y=%.6fx+(%.6f)" % (z_high[0], z_high[1])
+            )
             y_low = response_low_temp
             z_low = np.polyfit(x, y_low, 1)
             p_low = np.poly1d(z_low)
-            plt.plot(x,p_low(x), "--", label = "y=%.6fx+(%.6f)"%(z_low[0],z_low[1]))
-            plt.plot(df['Date'], df['Average Temp'])
+            plt.plot(x, p_low(x), "--", label="y=%.6fx+(%.6f)" % (z_low[0], z_low[1]))
+            plt.plot(df["Date"], df["Average Temp"])
             plt.plot(response_high_temp)
             plt.plot(response_low_temp)
             plt.ylabel("Average Temp(" + degree_symbol + "F)")
             plt.title(label="Average Temperature of " + city)
             plt.legend()
             plt.show()
-            
-            
 
         city_lookup = Entry(root)
         city_lookup.grid(row=0, column=0, stick=W + E + N + S)
